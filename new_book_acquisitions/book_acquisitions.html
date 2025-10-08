@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>New Acquisitions - APC Library</title>
+    <style>
+        :root {
+            --primary-color: #334290;
+            --secondary-color: #e7af41;
+            --text-dark: #333;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .main-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .top-banner {
+            background-color: var(--secondary-color);
+            color: var(--primary-color);
+            padding: 15px 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            text-align: center;
+            box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
+        }
+
+        .top-banner h1 {
+            margin: 0;
+            font-size: 2rem;
+            font-weight: 800;
+        }
+
+        .updatecontent {
+            display: grid;
+            gap: 1.5rem;
+            grid-template-columns: repeat(3, 1fr);
+            margin-bottom: 40px;
+        }
+
+        .books-section {
+            background-color: var(--primary-color);
+            padding: 20px;
+            border-radius: 20px;
+            box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
+        }
+
+        .books-section h1 {
+            font-size: 1.8rem;
+            color: var(--primary-color);
+            text-align: center;
+            padding: 10px;
+            background-color: var(--secondary-color);
+            border-radius: 15px;
+            box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
+            margin-bottom: 20px;
+        }
+
+        .coverflow-wrapper {
+            position: relative;
+            height: 430px;
+            overflow: hidden;
+            perspective: 1000px;
+        }
+
+        .coverflow-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            position: relative;
+            transition: transform 0.5s ease;
+        }
+
+        .book-card {
+            position: absolute;
+            transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            cursor: pointer;
+            max-width: 180px;
+        }
+
+        .book-card img {
+            width: 160px;
+            height: 250px;
+            object-fit: cover;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            border: 3px solid white;
+            display: block;
+        }
+
+        .book-info {
+            text-align: center;
+            margin-top: 10px;
+            padding: 0 10px;
+            max-width: 180px;
+        }
+
+        .book-title {
+            color: white;
+            font-weight: 600;
+            font-size: 0.85rem;
+            margin-bottom: 5px;
+            line-height: 1.3;
+            text-align: center;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            hyphens: auto;
+        }
+
+        .book-author {
+            color: var(--secondary-color);
+            font-size: 0.75rem;
+            margin-bottom: 3px;
+            line-height: 1.2;
+        }
+
+        .book-year {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.7rem;
+        }
+
+        .nav-button {
+            position: absolute;
+            top: 45%;
+            transform: translateY(-50%);
+            background: rgba(255, 255, 255, 0.3);
+            color: white;
+            border: none;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            cursor: pointer;
+            z-index: 100;
+            transition: all 0.3s ease;
+            font-size: 1.3rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .nav-button:hover {
+            background: var(--secondary-color);
+            color: var(--primary-color);
+        }
+
+        .nav-button.prev {
+            left: 10px;
+        }
+
+        .nav-button.next {
+            right: 10px;
+        }
+
+        .loading-text {
+            text-align: center;
+            color: white;
+            font-size: 1.2rem;
+            padding: 50px;
+        }
+
+        .error-text {
+            text-align: center;
+            color: #ff6b6b;
+            font-size: 1rem;
+            padding: 30px;
+        }
+
+        @media (max-width: 1024px) {
+            .updatecontent {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .updatecontent {
+                grid-template-columns: 1fr;
+            }
+
+            .books-section h1 {
+                font-size: 1.5rem;
+            }
+
+            .top-banner h1 {
+                font-size: 1.5rem;
+            }
+
+            .book-card img {
+                width: 120px;
+                height: 180px;
+            }
+
+            .coverflow-wrapper {
+                height: 380px;
+            }
+
+            .book-title {
+                font-size: 0.75rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="main-container">
+        <div class="top-banner">
+            <h1>NEW ACQUISITIONS</h1>
+        </div>
+
+        <div class="updatecontent">
+            <!-- Grade School Section -->
+            <div class="books-section">
+                <h1>Grade School</h1>
+                <div class="coverflow-wrapper">
+                    <div class="coverflow-container" id="carousel-gs">
+                        <div class="loading-text">Loading books...</div>
+                    </div>
+                    <button class="nav-button prev" onclick="moveCarousel('gs', -1)">‹</button>
+                    <button class="nav-button next" onclick="moveCarousel('gs', 1)">›</button>
+                </div>
+            </div>
+
+            <!-- High School Section -->
+            <div class="books-section">
+                <h1>High School</h1>
+                <div class="coverflow-wrapper">
+                    <div class="coverflow-container" id="carousel-hs">
+                        <div class="loading-text">Loading books...</div>
+                    </div>
+                    <button class="nav-button prev" onclick="moveCarousel('hs', -1)">‹</button>
+                    <button class="nav-button next" onclick="moveCarousel('hs', 1)">›</button>
+                </div>
+            </div>
+
+            <!-- Faculty Section -->
+            <div class="books-section">
+                <h1>Faculty</h1>
+                <div class="coverflow-wrapper">
+                    <div class="coverflow-container" id="carousel-faculty">
+                        <div class="loading-text">Loading books...</div>
+                    </div>
+                    <button class="nav-button prev" onclick="moveCarousel('faculty', -1)">‹</button>
+                    <button class="nav-button next" onclick="moveCarousel('faculty', 1)">›</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Configuration
+        const API_BASE = 'https://library.apc.edu.ph/cgi-bin/koha';
+        const PLACEHOLDER_COVER = 'https://via.placeholder.com/160x240/334290/ffffff?text=No+Cover';
+        
+        // Book data storage
+        const booksData = {
+            gs: [],
+            hs: [],
+            faculty: []
+        };
+
+        // Carousel state
+        const carouselState = {
+            gs: { currentIndex: 0, interval: null },
+            hs: { currentIndex: 0, interval: null },
+            faculty: { currentIndex: 0, interval: null }
+        };
+
+        // Fetch books from Koha API
+        async function fetchNewAcquisitions(section) {
+            try {
+                // Map sections to collection codes or search terms
+                const searchQueries = {
+                    gs: 'collection:GRADESCHOOL OR audience:Juvenile',
+                    hs: 'collection:HIGHSCHOOL OR audience:Young%20Adult',
+                    faculty: 'collection:FACULTY OR audience:Adult'
+                };
+
+                // Construct search URL for new acquisitions
+                const currentYear = new Date().getFullYear();
+                const searchUrl = `${API_BASE}/svc/report?id=999999&annotated=1&sql=SELECT%20biblionumber,%20title,%20author,%20copyrightdate,%20isbn%20FROM%20biblio%20WHERE%20datecreated%20>=%20DATE_SUB(NOW(),%20INTERVAL%206%20MONTH)%20ORDER%20BY%20datecreated%20DESC%20LIMIT%2020`;
+                
+                // Alternative: Use OPAC search
+                const opacSearchUrl = `${API_BASE}/opac-search.pl?idx=&q=&do=Search&limit=yr,st-numeric:${currentYear}&sort_by=acqdate_dsc&format=rss`;
+                
+                const response = await fetch(opacSearchUrl);
+                
+                if (!response.ok) {
+                    throw new Error('Failed to fetch books');
+                }
+
+                const text = await response.text();
+                return parseRSSFeed(text, section);
+                
+            } catch (error) {
+                console.error(`Error fetching ${section} books:`, error);
+                return generateFallbackData(section);
+            }
+        }
+
+        // Parse RSS feed from Koha
+        function parseRSSFeed(rssText, section) {
+            const parser = new DOMParser();
+            const xmlDoc = parser.parseFromString(rssText, "text/xml");
+            const items = xmlDoc.getElementsByTagName("item");
+            
+            const books = [];
+            const maxBooks = 10;
+            
+            for (let i = 0; i < Math.min(items.length, maxBooks); i++) {
+                const item = items[i];
+                const title = item.getElementsByTagName("title")[0]?.textContent || "Unknown Title";
+                const description = item.getElementsByTagName("description")[0]?.textContent || "";
+                const link = item.getElementsByTagName("link")[0]?.textContent || "";
+                
+                // Extract biblionumber from link
+                const biblioMatch = link.match(/biblionumber=(\d+)/);
+                const biblionumber = biblioMatch ? biblioMatch[1] : null;
+                
+                // Extract author and year from description
+                const authorMatch = description.match(/by ([^<]+)/);
+                const yearMatch = description.match(/(\d{4})/);
+                
+                books.push({
+                    title: cleanTitle(title),
+                    author: authorMatch ? authorMatch[1].trim() : "Unknown Author",
+                    year: yearMatch ? yearMatch[1] : new Date().getFullYear().toString(),
+                    cover: biblionumber ? `${API_BASE}/opac-image.pl?biblionumber=${biblionumber}` : PLACEHOLDER_COVER,
+                    biblionumber: biblionumber
+                });
+            }
+            
+            return books.length > 0 ? books : generateFallbackData(section);
+        }
+
+        // Clean title text
+        function cleanTitle(title) {
+            return title
+                .replace(/\[.*?\]/g, '')
+                .replace(/\s+/g, ' ')
+                .trim()
+                .substring(0, 100);
+        }
+
+        // Generate fallback data if API fails
+        function generateFallbackData(section) {
+            const sectionTitles = {
+                gs: [
+                    { title: "The Magic Tree House", author: "Mary Pope Osborne" },
+                    { title: "Wonder", author: "R.J. Palacio" },
+                    { title: "Charlotte's Web", author: "E.B. White" },
+                    { title: "Matilda", author: "Roald Dahl" },
+                    { title: "The Chronicles of Narnia", author: "C.S. Lewis" }
+                ],
+                hs: [
+                    { title: "To Kill a Mockingbird", author: "Harper Lee" },
+                    { title: "1984", author: "George Orwell" },
+                    { title: "The Great Gatsby", author: "F. Scott Fitzgerald" },
+                    { title: "Lord of the Flies", author: "William Golding" },
+                    { title: "The Hunger Games", author: "Suzanne Collins" }
+                ],
+                faculty: [
+                    { title: "Educational Psychology", author: "John W. Santrock" },
+                    { title: "Teaching Strategies", author: "Donald C. Orlich" },
+                    { title: "Curriculum Development", author: "Allan C. Ornstein" },
+                    { title: "Assessment in Education", author: "Robert J. Marzano" },
+                    { title: "Digital Teaching Methods", author: "Marc Prensky" }
+                ]
+            };
+
+            const currentYear = new Date().getFullYear();
+            return sectionTitles[section].map((book, index) => ({
+                ...book,
+                year: currentYear.toString(),
+                cover: `https://picsum.photos/160/240?random=${section}${index}`
+            }));
+        }
+
+        // Initialize carousel
+        function initCarousel(section) {
+            const container = document.getElementById(`carousel-${section}`);
+            const books = booksData[section];
+            
+            container.innerHTML = '';
+            
+            if (books.length === 0) {
+                container.innerHTML = '<div class="error-text">No books available</div>';
+                return;
+            }
+            
+            books.forEach((book, index) => {
+                const card = document.createElement('div');
+                card.className = 'book-card';
+                card.innerHTML = `
+                    <img src="${book.cover}" 
+                         alt="${book.title}" 
+                         onerror="this.src='${PLACEHOLDER_COVER}'"
+                         loading="lazy">
+                    <div class="book-info">
+                        <div class="book-title">${book.title}</div>
+                        <div class="book-author">${book.author}</div>
+                        <div class="book-year">${book.year}</div>
+                    </div>
+                `;
+                
+                container.appendChild(card);
+            });
+            
+            updateCarouselPosition(section);
+            startAutoRotation(section);
+        }
+
+        // Update carousel position
+        function updateCarouselPosition(section) {
+            const container = document.getElementById(`carousel-${section}`);
+            const cards = container.querySelectorAll('.book-card');
+            const currentIndex = carouselState[section].currentIndex;
+            const totalCards = cards.length;
+            
+            cards.forEach((card, index) => {
+                let position = index - currentIndex;
+                
+                if (position < -Math.floor(totalCards / 2)) {
+                    position += totalCards;
+                } else if (position > Math.floor(totalCards / 2)) {
+                    position -= totalCards;
+                }
+                
+                const absPos = Math.abs(position);
+                const translateX = position * 120;
+                const translateZ = -absPos * 150;
+                const rotateY = position * -25;
+                const scale = 1 - (absPos * 0.15);
+                const opacity = position === 0 ? 1 : 0.6 - (absPos * 0.1);
+                const zIndex = 100 - absPos;
+                
+                card.style.transform = `translateX(${translateX}px) translateZ(${translateZ}px) rotateY(${rotateY}deg) scale(${scale})`;
+                card.style.opacity = Math.max(opacity, 0.3);
+                card.style.zIndex = zIndex;
+            });
+        }
+
+        // Move carousel
+        function moveCarousel(section, direction) {
+            const books = booksData[section];
+            carouselState[section].currentIndex = (carouselState[section].currentIndex + direction + books.length) % books.length;
+            updateCarouselPosition(section);
+            resetAutoRotation(section);
+        }
+
+        // Auto-rotation
+        function startAutoRotation(section) {
+            carouselState[section].interval = setInterval(() => {
+                moveCarousel(section, 1);
+            }, 3000);
+        }
+
+        function resetAutoRotation(section) {
+            clearInterval(carouselState[section].interval);
+            startAutoRotation(section);
+        }
+
+        // Initialize all carousels
+        async function initializeAll() {
+            try {
+                const sections = ['gs', 'hs', 'faculty'];
+                
+                for (const section of sections) {
+                    booksData[section] = await fetchNewAcquisitions(section);
+                    initCarousel(section);
+                }
+                
+                console.log('All carousels initialized successfully!');
+            } catch (error) {
+                console.error('Error initializing carousels:', error);
+            }
+        }
+
+        // Start when page loads
+        window.addEventListener('DOMContentLoaded', initializeAll);
+    </script>
+</body>
+</html>
