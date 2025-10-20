@@ -1,37 +1,29 @@
 <div class="container">
-  <!-- Full-size slides -->
   <div class="mySlides" style="display: block;">
-    <div class="numbertext">1 / 7</div>
+    <img src="https://i.ytimg.com/vi/TK4I4RTOjQo/maxresdefault.jpg" style="width:100%">
+  </div>
+
+  <div class="mySlides" style="display: none;">
     <img src="https://via.placeholder.com/1000x500?text=Upload+Image+Here" style="width:100%">
   </div>
 
   <div class="mySlides" style="display: none;">
-    <div class="numbertext">2 / 7</div>
     <img src="https://via.placeholder.com/1000x500?text=Upload+Image+Here" style="width:100%">
   </div>
 
   <div class="mySlides" style="display: none;">
-    <div class="numbertext">3 / 7</div>
     <img src="https://via.placeholder.com/1000x500?text=Upload+Image+Here" style="width:100%">
   </div>
 
   <div class="mySlides" style="display: none;">
-    <div class="numbertext">4 / 7</div>
     <img src="https://via.placeholder.com/1000x500?text=Upload+Image+Here" style="width:100%">
   </div>
 
   <div class="mySlides" style="display: none;">
-    <div class="numbertext">5 / 7</div>
     <img src="https://via.placeholder.com/1000x500?text=Upload+Image+Here" style="width:100%">
   </div>
 
   <div class="mySlides" style="display: none;">
-    <div class="numbertext">6 / 7</div>
-    <img src="https://via.placeholder.com/1000x500?text=Upload+Image+Here" style="width:100%">
-  </div>
-
-  <div class="mySlides" style="display: none;">
-    <div class="numbertext">7 / 7</div>
     <img src="https://via.placeholder.com/1000x500?text=Upload+Image+Here" style="width:100%">
   </div>
 
@@ -64,14 +56,6 @@
   display: none;
 }
 
-/* Number text (1/7 etc.) */
-.numbertext {
-  color: #f2f2f2;
-  font-size: 14px;
-  padding: 8px 12px;
-  position: absolute;
-  top: 0;
-}
 
 /* Next & previous buttons */
 .prev, .next {
@@ -87,7 +71,6 @@
   transition: 0.3s;
   border-radius: 0 3px 3px 0;
   user-select: none;
-  background-color: rgba(0,0,0,0.5);
 }
 
 .next {
@@ -98,7 +81,9 @@
 /* On hover, add a background color */
 .prev:hover, .next:hover {
   background-color: rgba(0,0,0,0.8);
+  color: #334290
 }
+
 
 /* Center the dots properly */
 .dot-container {
@@ -126,8 +111,8 @@
 /* Force slideshow images into fixed size */
 .mySlides img {
   width: 100%;
-  height: 500px;      /* adjust as needed */
-  object-fit: cover;  /* crop to fill without distortion */
+  height: 500px;
+  object-fit: cover; 
   border-radius: 6px;
   animation: fade 1s;
 }
@@ -152,7 +137,7 @@
   border: 2px solid #f1f1f1;
 }
 
-/* Smooth fade effect for main slides */
+/* Smooth fade effect for slides */
 .mySlides img {
   border-radius: 6px;
   animation: fade 1s;
